@@ -1,0 +1,92 @@
+p, center {
+  font-family: NexaLight;
+  font-size: 50px;
+  color: black;
+  text-align: center;
+}
+
+.center{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: shown; /* Hidden by default */
+  width: auto; /* Full width (cover the whole page) */
+  height: auto; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#right{
+  position: fixed;
+  right: 630px;
+  top: 40px;
+  text-align: right;
+  font-size: 40;
+}
+
+.rightIcon{
+  position: fixed;
+  height: 40px;
+  width: 40px;
+  right: 49.5%;
+  top: 8.5%;
+}
+
+#rightNum{
+  position: fixed;
+  right: 580px;
+  top: 42px;
+  font-size: 40;
+}
+
+#left{
+  position: fixed;
+  left: 630px;
+  top: 7px;
+  text-align: left;
+  font-size: 40;
+}
+
+.leftIcon{
+  position: fixed;
+  height: 40px;
+  width: 40px;
+  left: 49%;
+  top: 2.8%;
+}
+
+#leftNum{
+  position: fixed;
+  left: 580px;
+  top: 8px;
+  font-size: 40;
+}
+
+#status {
+    position: absolute;
+    display: inline-block;
+    padding-left: -3%
+    text-align: center;
+    font-size: 25;
+    color: #a9acb5;
+}
+
+@font-face {
+  font-family: "NexaLight";
+  src: url(NexaLight.otf);
+}
+
+#center{
+  text-align: center;
+}
+
+body{
+  background-color: #000000;
+}
