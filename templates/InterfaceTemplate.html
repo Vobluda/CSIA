@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Interface</title>
+        <link rel="stylesheet" href="Interface.css">
+        <link rel="stylesheet" href="Backup.css">
+        <link rel="stylesheet" href="Setup.css">
+        <link rel="stylesheet" href="ControlPanel.css">
+        <link rel='shortcut icon' type='image/x-icon' href='Logo.ico'>
+    </head>
+
+    <body>
+        <ul class="header">
+            <li><button onclick='setSetupActive()'class="buttons" id="setup">Setup</button></li>
+            <li><button onclick='setControlPanelActive()' class="buttons" id="controlpanel">Control Panel</button></li>
+            <li><button onclick='setBackupActive()'class="buttons" id="backup">Backup</button></li>
+        </ul>
+
+        <iframe id="output-iframe"></iframe>
+    </body>
+
+    <script>
+        function clearActive() {
+            document.getElementById('setup').className = 'buttons';
+            document.getElementById('controlpanel').className = 'buttons';
+            document.getElementById('backup').className = 'buttons';
+        }
+
+        function setSetupActive() {
+            clearActive();
+            document.getElementById('setup').className = 'buttons active';
+            getPage('setup');
+        }
+
+        function setControlPanelActive() {
+            clearActive();
+            document.getElementById('controlpanel').className = 'buttons active';
+            getPage('controlPanel');
+        }
+
+        function setBackupActive() {
+            clearActive();
+            document.getElementById('backup').className = 'buttons active';
+            getPage('backup');
+        }
+    </script>
+
+    <script>
+        function getPage(pageName) {
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', pageName);
+            xhr.onreadystatechange = handler;
+            xhr.responseType = 'blob';
+            xhr.send();
+
+            function handler() {
+              if (this.readyState === this.DONE) {
+                if (this.status === 200) {
+                  var data_url = URL.createObjectURL(this.response);
+                  document.querySelector('#output-iframe').src = data_url;
+                  getCSS(pageName)
+                } else {
+                  console.error('no pdf :(');
+                }
+              }
+            }
+        }
+    </script>
+</html>

@@ -18,6 +18,10 @@ def default():
 def getImage(path):
     return app.send_static_file(path)
 
+@app.route('/interface')
+def interface():
+    return render_template('InterfaceTemplate.html')
+
 @app.route('/bracket', methods=['GET'])
 def bracketPage():
     try:
