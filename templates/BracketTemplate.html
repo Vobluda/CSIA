@@ -4,49 +4,52 @@
     <link rel="stylesheet" href="SingleElim.css">
     <link rel='shortcut icon' type='image/x-icon' href='Logo.ico'>
   </head>
-  {% if numRounds != 0 %}
-      <table>
-        <!-- creates header of rounds -->
-        {% for round in tournament.rounds %}
-          <th>Round {{loop.index}}</th>
-        {% endfor %}
 
-        {% for row in tournamentTable %}
-          <tr>
-            {% for item in row %}
-              {% if item is string %}
-                <td></td>
-              {% else %}
-                <td>
-                  <table>
-                    <colgroup>
-                      <col class="GameID">
-                      <col class="IGN">
-                      <col class="Score">
-                    </colgroup>
-                    <tr><td>{{item.id}}</td>
-                    {% if item.player1.name != "Null" %}
-                        <td>{{item.player1.name}}</td>
-                    {% else %}
-                        <td></td>
-                    {% endif %}
-                    <td>{{item.score[0]}}</td></tr>
-
-                    <tr><td>{{"BO" ~ item.bestOf}}</td>
-                    {% if item.player2.name != "Null" %}
-                        <td>{{item.player2.name}}</td>
-                    {% else %}
-                        <td></td>
-                    {% endif %}
-                    <td>{{item.score[1]}}</td></tr>
-                  </table>
-                </td>
-              {% endif %}
-
+  <body class="body">
+      {% if numRounds != 0 %}
+          <table>
+            <!-- creates header of rounds -->
+            {% for round in tournament.rounds %}
+              <th>Round {{loop.index}}</th>
             {% endfor %}
-          </tr>
-        {% endfor %}
-      </table>
-  {% endif %}
+
+            {% for row in tournamentTable %}
+              <tr>
+                {% for item in row %}
+                  {% if item is string %}
+                    <td></td>
+                  {% else %}
+                    <td>
+                      <table>
+                        <colgroup>
+                          <col class="GameID">
+                          <col class="IGN">
+                          <col class="Score">
+                        </colgroup>
+                        <tr><td>{{item.id}}</td>
+                        {% if item.player1.name != "Null" %}
+                            <td>{{item.player1.name}}</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        <td>{{item.score[0]}}</td></tr>
+
+                        <tr><td>{{"BO" ~ item.bestOf}}</td>
+                        {% if item.player2.name != "Null" %}
+                            <td>{{item.player2.name}}</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        <td>{{item.score[1]}}</td></tr>
+                      </table>
+                    </td>
+                  {% endif %}
+
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </table>
+      {% endif %}
+  </body>
 
 </html>

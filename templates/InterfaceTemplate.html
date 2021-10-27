@@ -2,22 +2,9 @@
     <head>
         <meta charset="UTF-8">
         <title>Interface</title>
-        <link rel="stylesheet" href="Interface.css">
-        <link rel="stylesheet" href="Backup.css">
-        <link rel="stylesheet" href="Setup.css">
-        <link rel="stylesheet" href="ControlPanel.css">
+        <link rel="stylesheet" href="styles.css">
         <link rel='shortcut icon' type='image/x-icon' href='Logo.ico'>
     </head>
-
-    <body>
-        <ul class="header">
-            <li><button onclick='setSetupActive()'class="buttons" id="setup">Setup</button></li>
-            <li><button onclick='setControlPanelActive()' class="buttons" id="controlpanel">Control Panel</button></li>
-            <li><button onclick='setBackupActive()'class="buttons" id="backup">Backup</button></li>
-        </ul>
-
-        <iframe id="output-iframe"></iframe>
-    </body>
 
     <script>
         function clearActive() {
@@ -36,6 +23,7 @@
             clearActive();
             document.getElementById('controlpanel').className = 'buttons active';
             getPage('controlPanel');
+            setTimeout(hideAll, 10);
         }
 
         function setBackupActive() {
@@ -47,24 +35,117 @@
 
     <script>
         function getPage(pageName) {
+            console.log('Getting ' + pageName.toString());
             var xhr = new XMLHttpRequest();
 
             xhr.open('GET', pageName);
             xhr.onreadystatechange = handler;
-            xhr.responseType = 'blob';
+            xhr.responseType = 'document';
             xhr.send();
 
             function handler() {
               if (this.readyState === this.DONE) {
                 if (this.status === 200) {
-                  var data_url = URL.createObjectURL(this.response);
-                  document.querySelector('#output-iframe').src = data_url;
-                  getCSS(pageName)
-                } else {
-                  console.error('no pdf :(');
+                  var data = xhr.response;
+                  data = new XMLSerializer().serializeToString(data);
+                  document.querySelector('#output-div').innerHTML = data;
                 }
               }
             }
         }
     </script>
+
+  <script>
+      function hideAll() {
+          console.log('Hiding all');
+          var list = document.querySelectorAll('.gameId, .p1score, .p2score, .character1, .character2, .bestOf');
+          for(var i = 0; i < list.length; i++)
+          {
+              list[i].classList.add('hidden');
+          }
+
+          document.getElementById('changeGame').classList.remove('active');
+          document.getElementById('changeScore').classList.remove('active');
+          document.getElementById('changeCharacter').classList.remove('active');
+          document.getElementById('changeBestOf').classList.remove('active');
+      }
+
+      function changeGame() {
+          hideAll();
+          var list = document.querySelectorAll('.gameId');
+          for(var i = 0; i < list.length; i++)
+          {
+              list[i].classList.remove('hidden');
+          }
+          document.getElementById('formIdentifier').value = 'changeGame';
+          document.getElementById('changeGame').classList.add('active');
+      }
+
+      function changeScore() {
+          hideAll();
+          var list = document.querySelectorAll('.p1score, .p2score');
+          for(var i = 0; i < list.length; i++)
+          {
+              list[i].classList.remove('hidden');
+          }
+          document.getElementById('formIdentifier').value = 'changeScore';
+          document.getElementById('changeScore').classList.add('active');
+      }
+
+      function changeCharacter() {
+          hideAll();
+          var list = document.querySelectorAll('.character1, .character2');
+          for(var i = 0; i < list.length; i++)
+          {
+              list[i].classList.remove('hidden');
+          }
+          document.getElementById('formIdentifier').value = 'changeCharacter';
+          document.getElementById('changeCharacter').classList.add('active');
+      }
+
+      function changeBestOf() {
+          hideAll();
+          var list = document.querySelectorAll('.bestOf');
+          for(var i = 0; i < list.length; i++)
+          {
+              list[i].classList.remove('hidden');
+          }
+          document.getElementById('formIdentifier').value = 'changeBO';
+          document.getElementById('changeBestOf').classList.add('active');
+      }
+  </script>
+
+    <body class="main">
+        <ul class="header">
+
+            {% if active == 'setup' %}
+                <li><button onclick='setSetupActive()'class="buttons active" id="setup">Setup</button></li>
+                <script>getPage('setup');</script>
+            {% else %}
+                <li><button onclick='setSetupActive()'class="buttons" id="setup">Setup</button></li>
+            {% endif %}
+
+            {% if active == 'controlPanel' %}
+                <li><button onclick='setControlPanelActive()' class="buttons active" id="controlpanel">Control Panel</button></li>
+                <script>getPage('controlPanel');</script>
+            {% else %}
+                <li><button onclick='setControlPanelActive()' class="buttons" id="controlpanel">Control Panel</button></li>
+            {% endif %}
+
+            {% if active == 'backup' %}
+                <li><button onclick='setBackupActive()'class="buttons active" id="backup">Backup</button></li>
+                <script>getPage('backup');</script>
+            {% else %}
+                <li><button onclick='setBackupActive()'class="buttons" id="backup">Backup</button></li>
+            {% endif %}
+
+            <li><form action='/logout'><button type="submit" class="buttons" id="logOut">Log Out</button></form></li>
+        </ul>
+
+
+
+        <div id="output-div"></div>
+
+        <!--<iframe id="output-iframe"></iframe>--!>
+    </body>
 </html>

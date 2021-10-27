@@ -3,12 +3,15 @@ import os
 import pickle
 import random
 
+import bcrypt as bcrypt
+
 from classes import *
 
 def resetBracket(tournament):
-    for round in tournament.rounds:
-        round.games.clear()
-    tournament.rounds.clear()
+    if tournament.rounds is not None:
+        for round in tournament.rounds:
+            round.games.clear()
+        tournament.rounds.clear()
 
 def createEmptyTournament(tournament):
     playerList = tournament.playerList
@@ -158,18 +161,33 @@ def printPlayerList(playerList):
     for player in playerList:
         print(txt.format(name = player.name, id = player.id, seed = player.seed))
 
-def backup(object, fileName):
-    with open(fileName, 'wb') as openedFile:
-        pickle.dump(object, openedFile)
-        print('Backup successful')
+def backup(rounds, playerList, fileName):
+    with open(fileName + 'Rounds.backup', 'wb') as openedFile:
+        pickle.dump(rounds, openedFile, protocol=2)
+    with open(fileName + 'PlayerList.backup', 'wb') as openedFile:
+        pickle.dump(playerList, openedFile, protocol=2)
+    print('Backup successful')
 
-def readBackup(objectFile):
-    with open(objectFile, 'rb') as openedFile:
-        tournament = pickle.load(openedFile)
-    print('Backup of tournament retrieved')
+def readBackup(tournament, backupName):
+    with open(backupName + 'Rounds.backup', 'rb') as openedFile:
+        tournament.rounds = pickle.load(openedFile)
+    with open(backupName + 'PlayerList.backup', 'rb') as openedFile:
+        tournament.playerList = pickle.load(openedFile)
+    print('Backup retrieved successfully')
 
 def generateBackupList():
     backups = []
     for filename in os.listdir('Backups'):
-        backups.append(filename)
+        if 'Rounds' in filename:
+            if filename.replace('Rounds.backup', '') not in backups:
+                backups.append(filename.replace('Rounds.backup', ''))
+        if 'PlayerList' in filename:
+            if filename.replace('PlayerList.backup', '') not in backups:
+                backups.append(filename.replace('PlayerList.backup', ''))
     return backups
+
+def checkPasswords(hash, password):
+    if bcrypt.hashpw(str(password).encode('utf-8'), hash.encode('utf-8')) == hash.encode('utf-8'):
+        return True
+    else:
+        return False

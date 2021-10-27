@@ -3,55 +3,30 @@
     <head>
         <meta charset="UTF-8">
         <title>Backups</title>
-        <link rel="stylesheet" href="Backup.css">
+        <link rel="stylesheet" href="styles.css">
         <link rel='shortcut icon' type='image/x-icon' href='Logo.ico'>
     </head>
 
-    <body>
-        <div>
-            <ul>
-                <li><a href="{{ url_for('setup') }}">Setup</a></li>
-                <li><a href="{{ url_for('controlPanel') }}">Control Panel</a></li>
-                <li><a href="{{ url_for('backup') }} " id="active">Backup</a></li>
-            </ul>
-        </div>
-
+    <body class="body">
         <div id="buttonDiv">
             <form action="/backup" method="post" id="backupForm" class='formSubmits'>
                 <input type='text' name='formIdentifier' value='backupForm' class='hidden'>
-                <input type='text' name='backupName' value='' id="backupName" class='hidden'>
+                <input type='text' name='backupName' value='' placeholder="Enter Backup Name" id="backupName"><br>
                 <button type='submit' class='buttons' id="backupButton">Backup Tournament</button>
             </form>
             <form action="/backup" method="post" id="retrieveBackupForm" class='formSubmits'>
                 <input type='text' name='formIdentifier' value='retrieveBackupForm' class='hidden'>
                 <div id="radios">
-                    <table>
+                <table>
                     <tr>Below is a list of all the backups currently in storage:</tr><br>
                     {% for backup in backupList %}
                         <tr><input type="radio" class="radioButtons" name="backupName" value={{ backup }}>{{ backup }}</tr><br>
                     {% endfor %}
-                    </table>
+                </table>
                 </div>
                 <input type="submit" value="Retrieve Tournament Backup" class='buttons'>
             </form>
         </div>
-
-        <script>
-            function backupName() {
-                var backupName = prompt("What would you like to name this backup?");
-
-                if (backupName === null) {
-                    return;
-                } else if (backupName != null) {
-                    document.getElementById("backupName").value = backupName;
-                }
-            };
-        </script>
-
-        <script>
-            window.onload=function() {
-                document.getElementById("backupButton").addEventListener("click", backupName);}
-        </script>
     </body>
 
 </html>

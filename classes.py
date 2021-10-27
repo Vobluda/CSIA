@@ -1,3 +1,5 @@
+from flask_login import UserMixin
+
 import functions
 
 
@@ -70,3 +72,9 @@ class Tournament: #tournament object is used as a container and driver for all s
 
     def setCurrentGameBestOf(self, bestOf):
         functions.setCurrentGameCharacter(self, bestOf)
+
+class PageHandler:
+    active = ''
+    loggedIn = False
+    password = '$2a$12$JhQQvEPl7MwICH6fZYTGVuDLlhjN8n89kPyjcy9V53sFklF66mr5C'
+
