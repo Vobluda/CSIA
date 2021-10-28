@@ -7,6 +7,27 @@
     </head>
 
     <script>
+        function hideAll() {
+          var list = document.querySelectorAll('.gameId, .p1score, .p2score, .character1, .character2, .bestOf, .id, .name, .school, .seed, .main');
+          for(var i = 0; i < list.length; i++)
+          {
+              list[i].classList.add('hidden');
+          }
+
+          try {
+              document.getElementById('changeGame').classList.remove('active');
+              document.getElementById('changeScore').classList.remove('active');
+              document.getElementById('changeCharacter').classList.remove('active');
+              document.getElementById('changeBestOf').classList.remove('active');
+          } catch {}
+          try {
+              document.getElementById('addPlayer').classList.remove('active');
+              document.getElementById('editPlayer').classList.remove('active');
+              document.getElementById('removePlayer').classList.remove('active');
+              document.getElementById('submitButton').classList.add('hidden');
+          } catch {}
+      }
+
         function clearActive() {
             document.getElementById('setup').className = 'buttons';
             document.getElementById('controlpanel').className = 'buttons';
@@ -31,6 +52,8 @@
             document.getElementById('backup').className = 'buttons active';
             getPage('backup');
         }
+
+        window.onload = hideAll();
     </script>
 
     <script>
@@ -56,18 +79,41 @@
     </script>
 
   <script>
-      function hideAll() {
-          console.log('Hiding all');
-          var list = document.querySelectorAll('.gameId, .p1score, .p2score, .character1, .character2, .bestOf');
+
+      function addPlayer() {
+          hideAll();
+          var list = document.querySelectorAll('.name, .school, .seed, .main');
           for(var i = 0; i < list.length; i++)
           {
-              list[i].classList.add('hidden');
+              list[i].classList.remove('hidden');
           }
+          document.getElementById('formIdentifier').value = 'addForm';
+          document.getElementById('addPlayer').classList.add('active');
+          document.getElementById('submitButton').classList.remove('hidden');
+      }
 
-          document.getElementById('changeGame').classList.remove('active');
-          document.getElementById('changeScore').classList.remove('active');
-          document.getElementById('changeCharacter').classList.remove('active');
-          document.getElementById('changeBestOf').classList.remove('active');
+      function editPlayer() {
+          hideAll();
+          var list = document.querySelectorAll('.id, .name, .school, .seed, .main');
+          for(var i = 0; i < list.length; i++)
+          {
+              list[i].classList.remove('hidden');
+          }
+          document.getElementById('formIdentifier').value = 'editForm';
+          document.getElementById('editPlayer').classList.add('active');
+          document.getElementById('submitButton').classList.remove('hidden');
+      }
+
+      function removePlayer() {
+          hideAll();
+          var list = document.querySelectorAll('.id');
+          for(var i = 0; i < list.length; i++)
+          {
+              list[i].classList.remove('hidden');
+          }
+          document.getElementById('formIdentifier').value = 'removeForm';
+          document.getElementById('removePlayer').classList.add('active');
+          document.getElementById('submitButton').classList.remove('hidden');
       }
 
       function changeGame() {
@@ -79,6 +125,7 @@
           }
           document.getElementById('formIdentifier').value = 'changeGame';
           document.getElementById('changeGame').classList.add('active');
+          document.getElementById('submitButton').classList.remove('hidden');
       }
 
       function changeScore() {
@@ -90,6 +137,7 @@
           }
           document.getElementById('formIdentifier').value = 'changeScore';
           document.getElementById('changeScore').classList.add('active');
+          document.getElementById('submitButton').classList.remove('hidden');
       }
 
       function changeCharacter() {
@@ -101,6 +149,7 @@
           }
           document.getElementById('formIdentifier').value = 'changeCharacter';
           document.getElementById('changeCharacter').classList.add('active');
+          document.getElementById('submitButton').classList.remove('hidden');
       }
 
       function changeBestOf() {
@@ -112,10 +161,11 @@
           }
           document.getElementById('formIdentifier').value = 'changeBO';
           document.getElementById('changeBestOf').classList.add('active');
+          document.getElementById('submitButton').classList.remove('hidden');
       }
   </script>
 
-    <body class="main">
+    <body class="mainBod">
         <ul class="header">
 
             {% if active == 'setup' %}
@@ -137,6 +187,9 @@
                 <script>getPage('backup');</script>
             {% else %}
                 <li><button onclick='setBackupActive()'class="buttons" id="backup">Backup</button></li>
+            {% endif %}
+
+            {% if active == 'None' %}
             {% endif %}
 
             <li><form action='/logout'><button type="submit" class="buttons" id="logOut">Log Out</button></form></li>

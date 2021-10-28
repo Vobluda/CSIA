@@ -3,7 +3,7 @@ import os
 import pickle
 import random
 
-import bcrypt as bcrypt
+import bcrypt
 
 from classes import *
 

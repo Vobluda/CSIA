@@ -35,38 +35,47 @@
 
       </div>
 
-      <div id="inputs">
+      <div>
+        <ul>
+            <li><button class="buttons" onclick="addPlayer()" id="addPlayer">Add Player</button></li>
+            <li><button class="buttons" onclick="editPlayer()" id="editPlayer">Edit Player</button></li>
+            <li><button class="buttons" onclick="removePlayer()" id="removePlayer">Remove Player</button></li>
+        </ul>
+    </div>
+
+      <div id="inputs" style="position: fixed; top: 110px;">
         <form action="/setup" method="post" id="form">
+          <select id='Action' name='formIdentifier' form='form' class="hidden">
+            <option value='' class="hidden" id="formIdentifier"></option>
+          </select>
+          <label class="id hidden">ID</label><br class="id hidden">
+          <input type="number" name="ID" class="id hidden"><br class="id hidden">
 
-          <select id='Action' name='formIdentifier' form='form'>
-            <option value='addForm'>Add Player</option>
-            <option value='editForm'>Edit Player</option>
-            <option value='deleteForm'>Delete Player</option>
-          </select><br>
-          <label>ID</label><br>
-          <input type="number" name="ID"></input><br>
+          <label class="name hidden">IGN</label><br class="name hidden">
+          <input type="text" name="IGN" class="name hidden"><br class="name hidden">
 
-          <label>IGN</label><br>
-          <input type="text" name="IGN"></input><br>
+          <label class="school hidden">School</label><br class="school hidden">
+          <input type="text" name="school" class="school hidden"><br class="school hidden">
 
-          <label>School</label><br>
-          <input type="text" name="school"></input><br>
+          <label class="seed hidden">Seed - leave empty if not seeded</label><br class="seed hidden">
+          <input type="number" name="seed" class="seed hidden"><br class="seed hidden">
 
-          <label>Seed - leave empty if not seeded</label><br>
-          <input type="number" name="seed"></input><br>
-
-          <label for="main">Main</label>
-          <select id="main" name="main" form="form">
+          <label for="main" class="main hidden">Main</label>
+          <select id="main" name="main" form="form" class="main hidden">
             {% for character in characterList %}
               <option value={{ character }}>{{ character }}</option>
             {% endfor %}
-          </select><br>
+          </select><br class="main hidden"">
 
-          <input type="submit" value="Submit" class="buttons">
+          <input type="submit" value="Submit" class="buttons" id="submitButton">
         </form>
         <form action="/setup" method="post" id="makeSEBracket" class='formSubmits'>
             <input type='text' name='formIdentifier' value='makeSEBracketForm' class='hidden'>
-            <input type="submit" value="Make Single Elimination Bracket" class='buttons'>
+            {% if playerList|length > 1 %}
+                <input type="submit" value="Make Single Elimination Bracket" class='buttons'>
+            {% else%}
+                <input type="submit" value="Make Single Elimination Bracket" class='buttons hidden'>
+            {% endif %}
         </form>
       </div>
 

@@ -64,7 +64,7 @@ def bracketPage():
 def controlPanel():
     if handler.loggedIn:
         if request.method == 'GET':
-            return render_template('ControlPanelTemplateTest.html', currentGame=tournament.currentGame, characterList=characters)
+            return render_template('ControlPanelTemplate.html', currentGame=tournament.currentGame, characterList=characters)
         if request.method == 'POST':
 
             if request.form['formIdentifier'] == 'changeGame':
@@ -95,6 +95,8 @@ def controlPanel():
 
             handler.active = 'controlPanel'
             return redirect(url_for('interface'))
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -144,6 +146,8 @@ def setup():
 
         handler.active = 'setup'
         return redirect(url_for('interface'))
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/backup', methods=['GET', 'Post'])
 def backup():
@@ -168,6 +172,8 @@ def backup():
 
         handler.active = 'backup'
         return redirect(url_for('interface'))
+    else:
+        return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(ssl_context='adhoc')
