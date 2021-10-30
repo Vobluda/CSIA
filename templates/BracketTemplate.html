@@ -8,11 +8,12 @@
   <body class="body">
       {% if numRounds != 0 %}
           <table>
-            <!-- creates header of rounds -->
+            <!-- this loop creates the header of rounds -->
             {% for round in tournament.rounds %}
               <th>Round {{loop.index}}</th>
             {% endfor %}
 
+            <!-- this loop iterates over the tournamentTable and creates a table based on the contents of the tournamentTable --!>
             {% for row in tournamentTable %}
               <tr>
                 {% for item in row %}

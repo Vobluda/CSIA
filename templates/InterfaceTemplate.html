@@ -6,16 +6,18 @@
         <link rel='shortcut icon' type='image/x-icon' href='Logo.ico'>
     </head>
 
+    <!-- the following scripts are not just for /interface but also for all the sub-pages /setup, /controlPanel and /bracket, which are copied into a div on this main site, and as such need to be referenced on this site --!>
+
     <script>
-        function hideAll() {
-          var list = document.querySelectorAll('.gameId, .p1score, .p2score, .character1, .character2, .bestOf, .id, .name, .school, .seed, .main');
+        function hideAll() { //this function is for selecting all the possible inputs and submit buttons etc. that should be hidden by default
+          var list = document.querySelectorAll('.gameId, .p1score, .p2score, .character1, .character2, .bestOf, .id, .name, .school, .seed, .main'); //this returns an array of all elements with those classes
           for(var i = 0; i < list.length; i++)
           {
-              list[i].classList.add('hidden');
+              list[i].classList.add('hidden'); //iterates over those elements and adds the hidden clas to them, which, using css, makes them invisible
           }
 
-          try {
-              document.getElementById('changeGame').classList.remove('active');
+          try { //these try catch's here are required because, based on the selected sub-page, some of these won't return any elements
+              document.getElementById('changeGame').classList.remove('active'); //these remove active from all the elements, because by default they shouldn't be active
               document.getElementById('changeScore').classList.remove('active');
               document.getElementById('changeCharacter').classList.remove('active');
               document.getElementById('changeBestOf').classList.remove('active');
@@ -28,19 +30,19 @@
           } catch {}
       }
 
-        function clearActive() {
+        function clearActive() { //this function clears the active class from all the sub-page selector buttons
             document.getElementById('setup').className = 'buttons';
             document.getElementById('controlpanel').className = 'buttons';
             document.getElementById('backup').className = 'buttons';
         }
 
-        function setSetupActive() {
-            clearActive();
-            document.getElementById('setup').className = 'buttons active';
-            getPage('setup');
+        function setSetupActive() { //the following three functions are called whenever one of the sub-page selector buttons are cliked
+            clearActive(); //they reset the actives
+            document.getElementById('setup').className = 'buttons active'; //this sets the clicked on button to active
+            getPage('setup'); //this calls the getPage() function to show the /setup sub-page in the div where it's needed.
         }
 
-        function setControlPanelActive() {
+        function setControlPanelActive() { //same as above, but different values
             clearActive();
             document.getElementById('controlpanel').className = 'buttons active';
             getPage('controlPanel');
@@ -57,21 +59,21 @@
     </script>
 
     <script>
-        function getPage(pageName) {
+        function getPage(pageName) { //this function is used to get the raw html of the requested sub-page.
             console.log('Getting ' + pageName.toString());
-            var xhr = new XMLHttpRequest();
+            var xhr = new XMLHttpRequest(); //an HTTP request is created
 
-            xhr.open('GET', pageName);
+            xhr.open('GET', pageName); //the correct headers/methods are set for the request
             xhr.onreadystatechange = handler;
             xhr.responseType = 'document';
-            xhr.send();
+            xhr.send(); //the request is sent
 
-            function handler() {
+            function handler() { //when the request is send and a response received
               if (this.readyState === this.DONE) {
                 if (this.status === 200) {
                   var data = xhr.response;
-                  data = new XMLSerializer().serializeToString(data);
-                  document.querySelector('#output-div').innerHTML = data;
+                  data = new XMLSerializer().serializeToString(data); //the raw text (the HTML of the sub-page) result of the response is loaded into data
+                  document.querySelector('#output-div').innerHTML = data; //this html is placed into the #output-div, which shows the sub-page within the interface page
                 }
               }
             }
@@ -80,7 +82,7 @@
 
   <script>
 
-      function addPlayer() {
+      function addPlayer() { //the following scripts are called upon when a specific sub-page request is selected. These allow only the necessary inputs to be displayed to not confuse the user
           hideAll();
           var list = document.querySelectorAll('.name, .school, .seed, .main');
           for(var i = 0; i < list.length; i++)
@@ -198,7 +200,5 @@
 
 
         <div id="output-div"></div>
-
-        <!--<iframe id="output-iframe"></iframe>--!>
     </body>
 </html>

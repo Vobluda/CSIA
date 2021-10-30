@@ -5,7 +5,7 @@
   </head>
 
   <body class="body">
-    <div>
+    <div> <!-- these buttons call upon functions in InterfaceTemplate.html, which change which inputs are visible to allow for a better UX --!>
         <ul>
             <li><button class="buttons" onclick="changeGame()" id="changeGame">Change Game</button></li>
             <li><button class="buttons" onclick="changeScore()" id="changeScore">Change Score</button></li>
@@ -58,7 +58,7 @@
         </form>
       </div>
 
-      {% if currentGame != None %}
+      {% if currentGame != None %} <!-- this is the part that creates the table that visualises the current game --!>
         <div id="currentGame">
           <h2>Current Game</h2>
           <table>

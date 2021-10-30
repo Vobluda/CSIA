@@ -47,13 +47,13 @@ class Tournament: #tournament object is used as a container and driver for all s
     currentGame = Game #holds a pointer to the current game, so it can be manipulated more easily
     playerList = [] #a list of all players in the tournament, useful for populating the tournament
 
-    def resetBracket(self):
+    def resetBracket(self): #function to clear the tournament object of rounds and games, so a new bracket can be created
         functions.resetBracket(self)
 
     def createTournament(self): #function for populating this object with rounds and games in the rounds list to be populated later
         functions.createEmptyTournament(self)
 
-    def populateTournament(self):
+    def populateTournament(self): #function for adding players from the playerList into the correct games in the already created tournament
         functions.populateEmptyTournament(self)
 
     def updateTournament(self): #passes over the tournament and updates the bracket (checks for winners and moves winners onto the next game they play)
@@ -62,17 +62,16 @@ class Tournament: #tournament object is used as a container and driver for all s
     def setCurrentGame(self, id): #scans the tournament for the game with the id asked for by the parameter and then sets a pointer to it into currentGame
         functions.setCurrentGame(self, id)
 
-    def setCurrentGameScore(self, score1, score2):
+    def setCurrentGameScore(self, score1, score2): #sets the score of the game referred to in currentGame to the desired values
         functions.setCurrentGameScore(self, score1, score2)
 
-    def setCurrentGameCharacters(self, char1, char2):
+    def setCurrentGameCharacters(self, char1, char2): #sets the characters of the game referred to in currentGame to the desired values
         functions.setCurrentGameCharacter(self, char1, char2)
 
-    def setCurrentGameBestOf(self, bestOf):
+    def setCurrentGameBestOf(self, bestOf): #sets the series length of the game referred to in currentGame to the desired values
         functions.setCurrentGameCharacter(self, bestOf)
 
-class PageHandler:
-    active = ''
-    loggedIn = False
-    password = '$2a$12$JhQQvEPl7MwICH6fZYTGVuDLlhjN8n89kPyjcy9V53sFklF66mr5C'
-
+class PageHandler: #PageHandler object is used to store important pieces of data related to the functioning of the webpage and the flask server.
+    active = '' #active refers to which sub-page (i.e. setup, controlpanel or backup) in the interface was selected before sending a request, so that when the redirect to the interface occurs, the same sub-page is selected
+    loggedIn = False #stores data whether or not the user is logged in or not
+    password = '$2a$12$JhQQvEPl7MwICH6fZYTGVuDLlhjN8n89kPyjcy9V53sFklF66mr5C' #the bcrypt hash of the correct password. This is used to check whether incoming passwords are correct or not

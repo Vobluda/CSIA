@@ -6,36 +6,8 @@
   </head>
 
   <body class="body">
-      <div id="tableDiv">
-        <table>
-          <th>ID</th>
-          <th>IGN</th>
-          <th>Main</th>
-          <th>School</th>
-          <th>Seed</th>
 
-        {% for player in playerList %}
-        <tr>
-          {% if player.id|int != 0 %}
-            <td>{{player.id}}</td>
-          {% else %}
-            <td>No ID Yet</td>
-          {% endif %}
-          {% if player.name == "Null" %}
-            <td></td>
-          {% else %}
-            <td>{{player.name}}</td>
-          {% endif %}
-          <td>{{player.defaultChar}}</td>
-          <td>{{player.school}}</td>
-          <td>{{player.seed}}</td>
-        </tr>
-        {% endfor %}
-        </table>
-
-      </div>
-
-      <div>
+      <div> <!-- these buttons call upon functions in InterfaceTemplate.html, which change which inputs are visible to allow for a better UX --!>
         <ul>
             <li><button class="buttons" onclick="addPlayer()" id="addPlayer">Add Player</button></li>
             <li><button class="buttons" onclick="editPlayer()" id="editPlayer">Edit Player</button></li>
@@ -77,6 +49,35 @@
                 <input type="submit" value="Make Single Elimination Bracket" class='buttons hidden'>
             {% endif %}
         </form>
+      </div>
+
+      <div id="tableDiv">
+        <table>
+          <th>ID</th>
+          <th>IGN</th>
+          <th>Main</th>
+          <th>School</th>
+          <th>Seed</th>
+
+        {% for player in playerList %} <!--this is the Jinja2 loop that creates the playerlist, where the render_template function iterates over the playerlist, making as many table rows as needed--!>
+        <tr>
+          {% if player.id|int != 0 %}
+            <td>{{player.id}}</td>
+          {% else %}
+            <td>No ID Yet</td>
+          {% endif %}
+          {% if player.name == "Null" %}
+            <td></td>
+          {% else %}
+            <td>{{player.name}}</td>
+          {% endif %}
+          <td>{{player.defaultChar}}</td>
+          <td>{{player.school}}</td>
+          <td>{{player.seed}}</td>
+        </tr>
+        {% endfor %}
+        </table>
+
       </div>
 
       <div>
