@@ -62,7 +62,7 @@
         <div id="currentGame">
           <h2>Current Game</h2>
           <table>
-            <th>GameID</th><th>Name</th><th>Character</th><th>Score</th>
+            <th>GameID</th><th>Name</th><th>Character</th><th>School</th><th>Score</th>
             {% if currentGame.id|int != 0 %}
                 <tr><td>{{currentGame.id}}</td>
             {% else %}
@@ -76,6 +76,7 @@
             {% endif %}
 
             <td>{{currentGame.player1.currentChar}}</td>
+            <td>{{ currentGame.player1.school }}</td>
             <td>{{currentGame.score[0]}}</td></tr>
 
             {% if currentGame.bestOf|int != 0 %}
@@ -89,6 +90,7 @@
                 <td>{{currentGame.player2.name}}</td>
             {% endif %}
             <td>{{currentGame.player2.currentChar}}</td>
+            <td>{{ currentGame.player2.school }}</td>
             <td>{{currentGame.score[1]}}</td></tr>
           </table>
         </div>

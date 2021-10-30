@@ -13,6 +13,8 @@ def resetBracket(tournament):
             round.games.clear()
         tournament.rounds.clear()
 
+    tournament.rounds = []
+
 def createEmptyTournament(tournament):
     playerList = tournament.playerList
     roundNumber = int(math.ceil(math.log(len(playerList), 2)))  # find the lowest possible round number (log base 2 of the amount of players rounded up)
@@ -77,7 +79,20 @@ def updateTournament(tournament):
 
         roundCounter = roundCounter + 1
 
+def addIdsToPlayerList(playerList):
+    idCounter = 1  # when all players have been added, we iterate once more and assign each one a unique id
+    for player in playerList:
+        player.id = idCounter
+        idCounter += 1
+
 def sanitizePlayerList(playerList):
+
+    i = 0
+    while i < len(playerList):
+        if playerList[i].name == 'Null':
+            del playerList[i]
+        else:
+            i += 1
 
     takenSeeds = [] #creates a list that will store all seeds being used already
     for player in playerList: #iterates over every player in the playerlist
@@ -107,10 +122,7 @@ def sanitizePlayerList(playerList):
         playerList.append(Player("Null", "", "", len(playerList)+seedCounter)) #creates a 'null' character, which can later be checked for as an automatic win
         seedCounter += 1
 
-    idCounter = 1 #when all players have been added, we iterate once more and assign each one a unique id
-    for player in playerList:
-        player.id = idCounter
-        idCounter += 1
+    addIdsToPlayerList(playerList)
 
 
 def setCurrentGame(tournament, id):

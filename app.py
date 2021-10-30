@@ -32,7 +32,6 @@ def login():
     if request.method == 'GET':
         return render_template('LoginTemplate.html', flag='Unknown')
     if request.method == 'POST':
-        print('Checking password')
         if functions.checkPasswords(handler.password, str(request.form['password'])):
             handler.loggedIn = True
             return redirect(url_for('interface'))
@@ -100,78 +99,96 @@ def controlPanel():
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
-    if request.method == 'GET':
-        return render_template('SetupTemplate.html', playerList=tournament.playerList, characterList=characters)
-    if request.method == 'POST':
+    if handler.loggedIn:
+        if request.method == 'GET':
+            return render_template('SetupTemplate.html', playerList=tournament.playerList, characterList=characters)
+        if request.method == 'POST':
 
-        if request.form['formIdentifier'] == 'addForm':
-            if request.form['seed'] == '':
-                player = Player(request.form['IGN'], request.form['main'], request.form['school'], 0)
-            else:
-                player = Player(request.form['IGN'], request.form['main'], request.form['school'], request.form['seed'])
-
-            tournament.playerList.append(player)
-
-        elif request.form['formIdentifier'] == 'editForm':
-            if request.form['seed'] == '':
-                 tournament.playerList[int(request.form['ID']) - 1] = Player(request.form['IGN'], request.form['main'], request.form['school'], 0)
-            else:
-                tournament.playerList[int(request.form['ID']) - 1] = Player(request.form['IGN'], request.form['main'], request.form['school'], request.form['seed'])
-
-        elif request.form['formIdentifier'] == 'deleteForm':
-            index = 0
-            IDList = []
-            for player in tournament.playerList:
-                IDList.append(player.id)
-            for ID in IDList:
-                if ID == int(request.form['ID']):
-                    delete = tournament.playerList.pop(index)
-                    pass
+            if request.form['formIdentifier'] == 'addForm':
+                if request.form['seed'] == '':
+                    player = Player(request.form['IGN'], request.form['main'], request.form['school'], 0)
                 else:
-                    index = index + 1
+                    player = Player(request.form['IGN'], request.form['main'], request.form['school'], request.form['seed'])
 
-        elif request.form['formIdentifier'] == 'makeSEBracketForm':
-            tournament.resetBracket()
-            functions.sanitizePlayerList(tournament.playerList)
-            tournament.createTournament()
-            tournament.populateTournament()
-            tournament.updateTournament()
-            print("")
-            functions.printTournament(tournament)
-            print("")
+                tournament.playerList.append(player)
 
-        else:
-            print('This kind of request is not valid: ' + request.form['formIdentifier'])
-            raise Exception
+            elif request.form['formIdentifier'] == 'editForm':
+                if request.form['ID'] != '':
+                    if request.form['seed'] == '':
+                        tournament.playerList[int(request.form['ID']) - 1] = Player(request.form['IGN'], request.form['main'], request.form['school'], 0)
+                    else:
+                        tournament.playerList[int(request.form['ID']) - 1] = Player(request.form['IGN'], request.form['main'], request.form['school'], request.form['seed'])
+                else:
+                    print('Player wishing to be edited was not found')
 
-        handler.active = 'setup'
-        return redirect(url_for('interface'))
+            elif request.form['formIdentifier'] == 'deleteForm':
+                if int(('0' + request.form['ID'])) != 0:
+                    index = 0
+                    IDList = []
+                    for player in tournament.playerList:
+                        IDList.append(player.id)
+                    for ID in IDList:
+                        if ID == int(request.form['ID']):
+                            delete = tournament.playerList.pop(index)
+                            pass
+                        else:
+                            index = index + 1
+                elif request.form['IGN'] != '':
+                    try:
+                        i = 0
+                        for i in range(0, len(tournament.playerList)):
+                            if (tournament.playerList[i].name == request.form['IGN']):
+                                index = i
+                            else:
+                                i += 1
+                        del tournament.playerList[index]
+                    except:
+                        print("Couldn't find player")
+
+            elif request.form['formIdentifier'] == 'makeSEBracketForm':
+                tournament.resetBracket()
+                functions.sanitizePlayerList(tournament.playerList)
+                tournament.createTournament()
+                tournament.populateTournament()
+                tournament.updateTournament()
+                print("")
+                functions.printTournament(tournament)
+                print("")
+
+            else:
+                print('This kind of request is not valid: ' + request.form['formIdentifier'])
+                raise Exception
+
+            handler.active = 'setup'
+            functions.addIdsToPlayerList(tournament.playerList)
+            return redirect(url_for('interface'))
     else:
         return redirect(url_for('login'))
 
 @app.route('/backup', methods=['GET', 'Post'])
 def backup():
-    if request.method == 'GET':
-        return render_template('BackupTemplate.html', backupList=functions.generateBackupList())
+    if handler.loggedIn:
+        if request.method == 'GET':
+            return render_template('BackupTemplate.html', backupList=functions.generateBackupList())
 
-    if request.method == 'POST':
+        if request.method == 'POST':
 
-        if request.form['formIdentifier'] == 'backupForm':
-            try:
-                functions.backup(tournament.rounds, tournament.playerList, 'Backups/' + request.form['backupName'])
-            except Exception as e:
-                print(e)
-                print("Error occurred while trying to backup tournament")
+            if request.form['formIdentifier'] == 'backupForm':
+                try:
+                    functions.backup(tournament.rounds, tournament.playerList, 'Backups/' + request.form['backupName'])
+                except Exception as e:
+                    print(e)
+                    print("Error occurred while trying to backup tournament")
 
-        if request.form['formIdentifier'] == 'retrieveBackupForm':
-            try:
-                tournament.rounds = functions.readBackup(tournament, 'Backups/' + request.form['backupName'])
-            except Exception as e:
-                print(e)
-                print("Error occurred while trying to return to backup of tournament")
+            if request.form['formIdentifier'] == 'retrieveBackupForm':
+                try:
+                    tournament.rounds = functions.readBackup(tournament, 'Backups/' + request.form['backupName'])
+                except Exception as e:
+                    print(e)
+                    print("Error occurred while trying to return to backup of tournament")
 
-        handler.active = 'backup'
-        return redirect(url_for('interface'))
+            handler.active = 'backup'
+            return redirect(url_for('interface'))
     else:
         return redirect(url_for('login'))
 
