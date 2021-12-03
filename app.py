@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
 from classes import *
+import functions
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object('config')
@@ -64,13 +65,18 @@ def controlPanel(): #this function is called whenever the /controlpanel page is 
 
         if request.method == 'POST': #if the request is a POST request, then check what the form submitted was trying to do
 
-            if request.form['formIdentifier'] == 'changeGame': #I am determining what the request was meant to do based on a hidden value that is changed based on selection using javascript on the page. For example, if the user wants to change the current game, they select it on the site, which changes the formIdentified value to 'changeGame'
+            if request.form['formIdentifier'] == 'changeGame': #I am determining what the request was meant
+                # to do based on a hidden value that is changed based on selection using javascript on the page.
+                # For example, if the user wants to change the current game, they select it on the site, which
+                # changes the formIdentified value to 'changeGame'
                 try: #all these functions are wrapped in try except statements to fail gracefully
-                    tournament.setCurrentGame(int(request.form['gameID'])) #sets the current game based on the id input. Check the comments in functions.py for how this works
+                    tournament.setCurrentGame(int(request.form['gameID'])) #sets the current game based on the
+                    # id input. Check the comments in functions.py for how this works
                 except:
                     print('Error occurred while trying to select game')
 
-            elif request.form['formIdentifier'] == 'changeScore': #similar approach is taken for changing all of these, so read the comments for changeGame for more info.
+            elif request.form['formIdentifier'] == 'changeScore': #similar approach is taken for changing all of
+                # these, so read the comments for changeGame for more info.
                 try:
                     tournament.setCurrentGameScore(request.form['p1Score'], int(request.form['p2Score']))
                 except:
@@ -139,7 +145,7 @@ def setup(): #this function is called whenever the page /setup is requested. Dif
 
             elif request.form['formIdentifier'] == 'makeSEBracketForm': #this is triggered when the user finally requests for the tournament bracket to be created
                 tournament.resetBracket() #firstly, the tournament's rounds and games are wiped to ensure that previous tournament data doesn't interfere
-                functions.sanitizePlayerList(tournament.playerList) #then the playerList inputs are sanitized (which validates seeds and creates the appropriate amount of 'Null' players to make the tournament function
+                tournament.sanitizePlayerList() #then the playerList inputs are sanitized (which validates seeds and creates the appropriate amount of 'Null' players to make the tournament function
                 tournament.createTournament() #then, the rounds and games are created
                 tournament.populateTournament() #following that, those empty games are populated with the players based on seeding
                 tournament.updateTournament() #finally, one pass of updateTournament() is called to ensure that any players seeded against 'Null' players are automatically moved onto the next round

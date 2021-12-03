@@ -72,8 +72,10 @@
               if (this.readyState === this.DONE) {
                 if (this.status === 200) {
                   var data = xhr.response;
-                  data = new XMLSerializer().serializeToString(data); //the raw text (the HTML of the sub-page) result of the response is loaded into data
-                  document.querySelector('#output-div').innerHTML = data; //this html is placed into the #output-div, which shows the sub-page within the interface page
+                  data = new XMLSerializer().serializeToString(data); //the raw text
+                    // (the HTML of the sub-page) result of the response is loaded into data
+                  document.querySelector('#output-div').innerHTML = data; //this html is placed
+                    // into the #output-div, which shows the sub-page within the interface page
                 }
               }
             }
