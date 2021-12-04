@@ -51,6 +51,8 @@ class Game: #the object representing one set of matches (called a game).
 
 class Round: #a round object is used to represent a group of games that lead into another round of games. Used when generating the tournament
     games = [] #list of game objects inside the round
+    def clearGames(self):
+        self.games.clear()
 
 class Tournament: #tournament object is used as a container and driver for all subsequent classes. Holds the list of all rounds and a list of all players (used for populating the tournament)
     rounds = [] #list of all round objects
@@ -101,16 +103,15 @@ class Tournament: #tournament object is used as a container and driver for all s
 
     def resetBracket(self): #function to clear the tournament object of rounds and games, so a new
         # bracket can be created
-        if self.rounds is not None:  # as long as the tournament isn't empty
-            self.rounds.clear()  # removes all the round objects in the tournament
-        self.rounds = []  # it then resets tournament.rounds to a list, because .clear() doesn't leave
+        if self.rounds is not None:
+            for round in self.rounds:
+                round.clearGames()
+        self.rounds = []
         # a list behind, but instead Null
 
     def createTournament(self): #function for populating this object with rounds and games in the
         # rounds list to be populated later
-        playerList = self.playerList
-        roundNumber = int(math.ceil(math.log(len(playerList),
-                                             2)))  # find the lowest possible round number (log base 2
+        roundNumber = int(math.ceil(math.log(len(self.playerList), 2)))  # find the lowest possible round number (log base 2
         # of the amount of players rounded up)
         for currentRound in range(0, roundNumber):  # loop over the round indices
             self.rounds.append(Round())  # appends a new round object to the rounds list
